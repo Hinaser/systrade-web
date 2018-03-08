@@ -76,7 +76,8 @@ exportsオブジェクトは実行環境間で共有されます。
 }
 </pre></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="trader-getOrderHistory">trader.getOrderHistory()</div><p class="method-item-summary">注文履歴を取得します。
 </p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.getOrderHistory();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">現在有効な注文が格納された配列が返されます。<br>
+</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">過去の注文が格納された配列が返されます。<br>
+現在アクティブな注文は含まれません<br>
 注文オブジェクトのフォーマットは上記のgetOpenOrders()と同じです。</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><h4 class="method-item-header" id="trader-getMarketState">trader.getMarketState()</h4><p class="method-item-summary">マーケットサーバの状態を取得します。
 </p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.getMarketState();
 </pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">object</td><td class="description">サーバの負荷状況および板の状態を取得します。<br><pre>{
@@ -138,7 +139,7 @@ UNCONFIRMEDは約定に対応する建玉の増減が未確認であることを
 </p><div class="methods"><div class="method-item"><div class="method-item-header" id="monitor-getChart">monitor.getChart(分足, 時点, タイプ)</div><p class="method-item-summary">価格のチャートを取得します。
 </p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.getChart("1", "latest", "max");
 </pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">number</td><td class="description">指定したチャートタイプの価格値を取得します。
-(例) 1分足の最新の足の最高価格</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div><table><thead><tr><td class="name">引数</td><td class="required">必須？</td><td class="required">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="name">分足</td><td class="required">必須</td><td class="type">string</td><td class="description">チャートの分足を指定します。デフォルトでは0.2, 1, 3, 5, 15分足が指定できます。</td></tr><tr><td class="name">時点</td><td class="required">必須</td><td class="type">number | string</td><td class="description">現在と比較して何本前の足のローソクデータを取得するか指定します。
+(例) 1分足の最新の足の最高価格</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div><table><thead><tr><td class="name">引数</td><td class="required">必須？</td><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="name">分足</td><td class="required">必須</td><td class="type">string</td><td class="description">チャートの分足を指定します。デフォルトでは0.2, 1, 3, 5, 15分足が指定できます。</td></tr><tr><td class="name">時点</td><td class="required">必須</td><td class="type">number | string</td><td class="description">現在と比較して何本前の足のローソクデータを取得するか指定します。
 "latest"は0と等価です。</td></tr><tr><td class="name">タイプ</td><td class="required">必須</td><td class="type">string</td><td class="description">取得するローソク足データの種類を指定します。<br>
 "max", "min", "start", "last", "volume", "size", "avg", "diff"が指定できます。<br>
 それぞれ、高値、安値、始値、終値、出来高(円ベース)、総取引数量(BTCベース)、平均値、終値と始値の差を表します。
@@ -209,7 +210,7 @@ setInterval(function(){
     trader.sell(2);
   }
   売買フラグ = !売買フラグ;
-}, 10*1000);
+}, インターバル);
 </pre></div></div><div id="api-reference-index"><div class="index-caption">目次</div><ul></ul></div><script>var $index = $("#api-reference-index");
 var $ul = $index.find("ul");
 $ul.append("<li class='index-category'>API</li>");
