@@ -1,5 +1,11 @@
 importScripts("https://cdn.pubnub.com/sdk/javascript/pubnub.4.20.2.min.js");
 
+function console(){}
+console.log = function(msg){
+  if(typeof(msg) !== "string") msg = JSON.stringify(msg);
+  self.postMessage({channel: "console.log", message: msg})
+};
+
 main();
 
 function main(){
@@ -31,16 +37,32 @@ function main(){
     },
     initialInterval: 300,
     interval: {
-      timer: 1000,
+      ticker: 1000,
       execution: 400,
       board: 300,
       snapshot: 3000
     },
-    timer: {
-      timer: null,
-      execution: null,
-      board: null,
-      snapshot: null
+    boardConfig: {
+      maxRows: 30
+    },
+    activeMonitoring: {
+      enabled: true,
+      marketEndpoint: "https://api.bitflyer.jp/v1/",
+      requestInterval: {
+        execution: 2000,
+        snapshot: 6000
+      }
+    }
+  };
+  
+  var _timers = {
+    ticker: null,
+    execution: null,
+    board: null,
+    snapshot: null,
+    watchMarket: {
+      snapshot: null,
+      execution: null
     }
   };
   
@@ -51,45 +73,7 @@ function main(){
   });
   
   pubnub.addListener({
-    message: function(msg){
-      if(msg.channel === 'lightning_ticker_FX_BTC_JPY'){
-        _state.ticker = msg.message;
-      }
-      else if(msg.channel === 'lightning_executions_FX_BTC_JPY'){
-        _state.execution = _state.execution.concat(msg.message);
-      }
-      else if(msg.channel === 'lightning_board_FX_BTC_JPY'){
-        if(_state.board === null){
-          _state.board = msg.message;
-        }
-        else {
-          var newBoard = msg.message;
-          _state.board.mid_price = newBoard.mid_price;
-  
-          ["bids", "asks"].forEach(function(bid_ask){
-            newBoard[bid_ask].forEach(function(newBoardItem){
-              var oldBoardIndex = _state.board[bid_ask].findIndex(function(oldBoardItem){
-                return oldBoardItem.price === newBoardItem.price;
-              });
-      
-              if(oldBoardIndex > -1){
-                if(newBoardItem.size > 0)
-                  _state.board[bid_ask][oldBoardIndex] = newBoardItem;
-                else
-                  _state.board[bid_ask].splice(oldBoardIndex, 1)
-              }
-              else{
-                if(newBoardItem.size > 0)
-                  _state.board[bid_ask].push(newBoardItem);
-              }
-            });
-          });
-        }
-      }
-      else if(msg.channel === 'lightning_board_snapshot_FX_BTC_JPY'){
-        _state.snapshot = msg.message;
-      }
-    }
+    message: onMessage
   });
   
   
@@ -98,14 +82,15 @@ function main(){
     
     switch(e.data.type){
       case "start":
+        updateConfig(e.data.value);
+        
         _state.startTime = Date.now();
         _state.stats.startTime = _state.startTime;
         start(pubnub);
+        watchMarket();
         break;
-      case "change_interval":
-        if(typeof(e.data.value) === "object"){
-          _state.interval = e.data.value;
-        }
+      case "update_config":
+        updateConfig(e.data.value);
         break;
       case "get_state":
         self.postMessage({channel: "state", message: _state});
@@ -127,7 +112,7 @@ function main(){
       _state.ticker = null;
     }
   
-    _state.timer.ticker = setTimeout(sendTicker, _state.interval.ticker);
+    _timers.ticker = setTimeout(sendTicker, _state.interval.ticker);
   };
   
   var sendExecution = function(){
@@ -139,7 +124,7 @@ function main(){
       _state.execution = [];
     }
   
-    _state.timer.execution = setTimeout(sendExecution, _state.interval.execution);
+    _timers.execution = setTimeout(sendExecution, _state.interval.execution);
   };
   
   var sendBoard = function(){
@@ -151,7 +136,7 @@ function main(){
       _state.board = null;
     }
   
-    _state.timer.board = setTimeout(sendBoard, _state.interval.board);
+    _timers.board = setTimeout(sendBoard, _state.interval.board);
   };
   
   var sendSnapshot = function(){
@@ -163,7 +148,7 @@ function main(){
       _state.snapshot = null;
     }
   
-    _state.timer.snapshot = setTimeout(sendSnapshot, _state.interval.snapshot);
+    _timers.snapshot = setTimeout(sendSnapshot, _state.interval.snapshot);
   };
   
   sendExecution();
@@ -196,6 +181,118 @@ function main(){
     
     _state.stats.totalCount[propName]++;
   }
+  
+  function onMessage(msg){
+    if(msg.channel === 'lightning_ticker_FX_BTC_JPY'){
+      _state.ticker = msg.message;
+    }
+    else if(msg.channel === 'lightning_executions_FX_BTC_JPY'){
+      _state.execution = _state.execution.concat(msg.message);
+    }
+    else if(msg.channel === 'lightning_board_FX_BTC_JPY'){
+      if(_state.board === null){
+        _state.board = msg.message;
+      }
+      else {
+        var newBoard = msg.message;
+        _state.board.mid_price = newBoard.mid_price;
+        
+        ["bids", "asks"].forEach(function(bid_ask){
+          newBoard[bid_ask].forEach(function(newBoardItem){
+            var oldBoardIndex = _state.board[bid_ask].findIndex(function(oldBoardItem){
+              return oldBoardItem.price === newBoardItem.price;
+            });
+            
+            if(oldBoardIndex > -1){
+              if(newBoardItem.size > 0)
+                _state.board[bid_ask][oldBoardIndex] = newBoardItem;
+              else
+                _state.board[bid_ask].splice(oldBoardIndex, 1)
+            }
+            else{
+              if(newBoardItem.size > 0)
+                _state.board[bid_ask].push(newBoardItem);
+            }
+          });
+        });
+      }
+    }
+    else if(msg.channel === 'lightning_board_snapshot_FX_BTC_JPY'){
+      // board snapshot may be so huge. I confirmed that several thousand element of bids/asks.
+      // This may impact sort performance heavily on device which does not have sufficient computing resource.
+      // So I made an option to cut verbose elements.
+      if(typeof(_state.boardConfig.maxRows) === "number" && _state.boardConfig.maxRows > 0){
+        var bids = msg.message.bids;
+        var asks = msg.message.asks;
+        var sorter = function(a, b){
+          if(a.price > b.price) return -1;
+          if(a.price < b.price) return 1;
+          return 0;
+        };
+        bids.sort(sorter);
+        asks.sort(sorter);
+        
+        if(_state.boardConfig.maxRows > 0 && asks.length > _state.boardConfig.maxRows){
+          asks.splice(0, asks.length - _state.boardConfig.maxRows);
+        }
+        if(_state.boardConfig.maxRows > 0 && bids.length > _state.boardConfig.maxRows){
+          bids.splice(_state.boardConfig.maxRows - 1, bids.length - _state.boardConfig.maxRows);
+        }
+        
+        msg.message.bids = bids;
+        msg.message.asks = asks;
+      }
+      
+      _state.snapshot = msg.message;
+    }
+  }
+  
+  function watchMarket(){
+    var opt = _state.activeMonitoring;
+    
+    var requestSnapshotData = function(){
+      if(opt.enabled && typeof(opt.requestInterval.snapshot) === "number" && opt.requestInterval.snapshot > 0){
+        var p1 = requestSnapshot(opt.marketEndpoint).then(function(msg){
+          onMessage(msg);
+        });
+      }
+      
+      _timers.watchMarket.snapshot = setTimeout(requestSnapshotData, opt.requestInterval.snapshot);
+    };
+    
+    var requestExecutionData = function(){
+      if(opt.enabled && typeof(opt.requestInterval.execution) === "number" && opt.requestInterval.execution > 0){
+        var p1 = requestExecutions(opt.marketEndpoint).then(function(msg){
+          onMessage(msg);
+        });
+      }
+    
+      _timers.watchMarket.execution = setTimeout(requestExecutionData, opt.requestInterval.execution);
+    };
+  
+    requestExecutionData();
+    requestSnapshotData();
+  }
+  
+  function updateConfig(options){
+    if(typeof(options) === "object"){
+      if(typeof(options.interval) === "object"){
+        Object.keys(options.interval).forEach(function(key){
+          _state.interval[key] = options.interval[key];
+        });
+      }
+      if(typeof(options.boardConfig) === "object"){
+        Object.keys(options.boardConfig).forEach(function(key){
+          _state.boardConfig[key] = options.boardConfig[key];
+        });
+      }
+      if(typeof(options.activeMonitoring) === "object"){
+        Object.keys(options.activeMonitoring).forEach(function(key){
+          _state.activeMonitoring[key] = options.activeMonitoring[key];
+        });
+      }
+    }
+  }
 }
 
 function start(pubnub){
@@ -207,5 +304,51 @@ function start(pubnub){
       'lightning_board_FX_BTC_JPY'
     ]
   });
+}
+
+function requestToMarket(marketEndpoint, path, product_code, count, before, after){
+  var qs = [];
+  if(product_code) qs.push("product_code=" + product_code);
+  if(count) qs.push("count=" + count);
+  if(before) qs.push("before=" + before);
+  if(after) qs.push("after=" + after);
+  if(qs.length > 0){
+    path += "?" + qs.join("&");
+  }
+  
+  return fetch(marketEndpoint + path, {
+    method: "GET",
+    mode: "cors"
+  }).then(function(res){
+    return res.json();
+  });
+}
+
+function requestSnapshot(marketEndpoint){
+  return requestToMarket(marketEndpoint, "board", "FX_BTC_JPY")
+    .then(function(body){
+      return {
+        channel: "lightning_board_snapshot_FX_BTC_JPY",
+        message: body
+      };
+    });
+}
+
+function requestExecutions(marketEndpoint, after, count){
+  return requestToMarket(marketEndpoint, "executions", "FX_BTC_JPY", count, null, after)
+    .then(function(body){
+      try{
+        body = body.map(function(exec){
+          exec.exec_date += "Z"; // Just a Patch-work to fix date string to UTC
+          return exec;
+        });
+      }
+      catch(e){}
+      
+      return {
+        channel: "lightning_executions_FX_BTC_JPY",
+        message: body
+      };
+    });
 }
 
