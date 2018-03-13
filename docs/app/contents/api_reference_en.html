@@ -5,7 +5,7 @@ an order to buy 2 BTC for market price will be requested.
 </p></div><div class="sharing-data"><div class="sharing-data-header">Shared variables</div><p>Every time you execute a program in Machine Order tab, new execution environment is created.<br>
 This means local variables declared in previous execution cannot be accessed in next execution.<br>
 But don't worry. You can bring those local variables into next execution context by assigning
-the values into `exports` object as following.</p><p>exports["<name>"] = <value>;</p><p>exports Object is shared among whole execution contexts.
+the values into `exports` object as following.</p><p>exports["name"] = value;</p><p>exports Object is shared among whole execution contexts.
 </p></div><div class="classes"><div class="classes-header">API</div><div class="hr"></div><div class="class-item"><div class="class-item-header">trader</div><p class="class-item-summary">You can request an order, settle positions, cancel orders with `trader` instance.
 </p><div class="methods"><div class="method-item"><div class="method-item-header" id="trader-buy">trader.buy(amount, [price])</div><p class="method-item-summary">Request a bid order.
 </p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.buy(2, 1000000);
