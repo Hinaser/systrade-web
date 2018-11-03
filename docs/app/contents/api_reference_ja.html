@@ -1,41 +1,355 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><link href="../css/main.css" rel="stylesheet"><script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script></head><body class="theme-dark" id="api-reference-contents"><div class="api-reference-header"><div class="api-reference-title">APIリファレンス</div><div class="hr"></div><p>SysTradeではプログラミング言語(Javascript)を用いたビットコインのアルゴリズム取引が可能です。<br>
-ここでは具体的なプログラム注文の書き方、プログラムで利用できるAPIについて記載します。</p><p>ここに記載されているAPIは「プログラム注文」タブで全て実行可能です。<br>
-例えばプログラム注文タブで「trader.buy(2);」と入力し実行すると2BTCの
-成行買い注文がリクエストされます。
-</p></div><div class="sharing-data"><div class="sharing-data-header">データ共有</div><p>プログラム注文でプログラムを実行すると実行環境が毎回新しく作成されます。<br>
-これはプログラムを実行する度に以前に宣言した変数の値は次のプログラム実行時に
-引き継がれないということです。<br>
-変数にセットした値を次回実行時のプログラムでも利用したい場合は</p><p>exports["任意のプロパティ名"] = 格納したい値;</p><p>のように exports オブジェクトを利用してください。<br>
-exportsオブジェクトは実行環境間で共有されます。
-</p></div><div class="classes"><div class="classes-header">API</div><div class="hr"></div><div class="class-item"><div class="class-item-header">trader</div><p class="class-item-summary">traderインスタンスを使うと売買注文の発行、建玉決済、キャンセル等ができます。
-</p><div class="methods"><div class="method-item"><div class="method-item-header" id="trader-buy">trader.buy(数量, [価格])</div><p class="method-item-summary">買い注文を発行します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.buy(2, 1000000);
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">object</td><td class="description">注文idが含まれるオブジェクト。注文をキャンセルする時や、注文結果の確認等に使用します。</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div><table><thead><tr><td class="name">引数</td><td class="required">必須？</td><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="name">数量</td><td class="required">必須</td><td class="type">number</td><td class="description">ビットコインの数量を指定します。単位はBTCです。
-最低数量は0.001BTCです。ただし、0.001BTC以上であれば
-1satoshi単位まで細かい数量の指定が可能です。<br>
-(例) 0.00100001 BTC</td></tr><tr><td class="name">価格</td><td class="required">任意</td><td class="type">number</td><td class="description">ビットコインの注文価格を指定します。省略した場合は成行注文になります。
-</td></tr></tbody></table></div></div><div class="method-item"><div class="method-item-header" id="trader-sell">trader.sell(数量, [価格])</div><p class="method-item-summary">売り注文を発行します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.sell(2, 1000000);
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">object</td><td class="description">注文idが含まれるオブジェクト。注文をキャンセルする時や、注文結果の確認等に使用します。</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div><table><thead><tr><td class="name">引数</td><td class="required">必須？</td><td class="required">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="name">数量</td><td class="required">必須</td><td class="type">number</td><td class="description">ビットコインの数量を指定します。単位はBTCです。
-最低数量は0.001BTCです。ただし、0.001BTC以上であれば
-1satoshi単位まで細かい数量の指定が可能です。<br>
-(例) 0.00100001 BTC</td></tr><tr><td class="name">価格</td><td class="required">任意</td><td class="type">number</td><td class="description">ビットコインの注文価格を指定します。省略した場合は成行注文になります。
-</td></tr></tbody></table></div></div><div class="method-item"><div class="method-item-header" id="trader-settleAll">trader.settleAll()</div><p class="method-item-summary">全ての建玉に対して反対方向の成行注文を発行します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.settleAll();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">全ての建玉に対するbuy/sellの返り値の配列</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="trader-cancelAll">trader.cancelAll()</div><p class="method-item-summary">アクティブな注文を全てキャンセルします。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.cancelAll();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Promise</td><td class="description">キャンセルリクエストが完了時にonFulfilled/onRejectedコールバックが実行されます。</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="trader-cancel">trader.cancel(注文ID)</div><p class="method-item-summary">指定したIDの注文をキャンセルします。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.cancel(19283);
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Promise</td><td class="description">キャンセルリクエスト完了時にonFulfilled/onRejectedコールバックが実行されます。</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div><table><thead><tr><td class="name">引数</td><td class="required">必須？</td><td class="required">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="name">注文ID</td><td class="required">必須</td><td class="type">number</td><td class="description">trader.buy/sellの返り値のorderIDを指定します。
-指定したorderIDの注文が板に残った状態(ACTIVE)であった場合のみに
-キャンセルできます。約定済みの注文についてはキャンセルできません。
-</td></tr></tbody></table></div></div><div class="method-item"><h4 class="method-item-header" id="trader-getLatestPrice">trader.getLatestPrice()</h4><p class="method-item-summary">最新の価格を取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.getLatestPrice();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">number</td><td class="description">最新のビットコイン価格。取引市場はbitFlyer FX。
-</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><h4 class="method-item-header" id="trader-getPositions">trader.getPositions()</h4><p class="method-item-summary">現在の建玉を取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.getPositions();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">現在有効な建玉オブジェクトが格納された配列が返されます。<br>
-建玉オブジェクトのフォーマットは下記をご参考ください。<br><pre>[
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link href="../css/main.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  </head>
+  <body class="theme-dark" id="api-reference-contents">
+    <div class="api-reference-header">
+      <div class="api-reference-title">APIリファレンス</div>
+      <div class="hr"></div>
+      <p>SysTradeではプログラミング言語(Javascript)を用いたビットコインのアルゴリズム取引が可能です。<br>
+        ここでは具体的なプログラム注文の書き方、プログラムで利用できるAPIについて記載します。
+      </p>
+      <p>ここに記載されているAPIは「プログラム注文」タブで全て実行可能です。<br>
+        例えばプログラム注文タブで「trader.buy(2);」と入力し実行すると2BTCの
+        成行買い注文がリクエストされます。
+        
+      </p>
+    </div>
+    <div class="sharing-data">
+      <div class="sharing-data-header">データ共有</div>
+      <p>プログラム注文でプログラムを実行すると実行環境が毎回新しく作成されます。<br>
+        これはプログラムを実行する度に以前に宣言した変数の値は次のプログラム実行時に
+        引き継がれないということです。<br>
+        変数にセットした値を次回実行時のプログラムでも利用したい場合は
+      </p>
+      <p>exports["任意のプロパティ名"] = 格納したい値;</p>
+      <p>のように exports オブジェクトを利用してください。<br>
+        exportsオブジェクトは実行環境間で共有されます。
+        
+      </p>
+    </div>
+    <div class="classes">
+      <div class="classes-header">API</div>
+      <div class="hr"></div>
+      <div class="class-item">
+        <div class="class-item-header">trader</div>
+        <p class="class-item-summary">
+          traderインスタンスを使うと売買注文の発行、建玉決済、キャンセル等ができます。
+          
+        </p>
+        <div class="methods">
+          <div class="method-item">
+            <div class="method-item-header" id="trader-buy">trader.buy(数量, [価格])</div>
+            <p class="method-item-summary">
+              買い注文を発行します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.buy(2, 1000000);
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">object</td>
+                    <td class="description">注文idが含まれるオブジェクト。注文をキャンセルする時や、注文結果の確認等に使用します。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="name">引数</td>
+                    <td class="required">必須？</td>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="name">数量</td>
+                    <td class="required">必須</td>
+                    <td class="type">number</td>
+                    <td class="description">
+                      ビットコインの数量を指定します。単位はBTCです。
+                      最低数量は0.001BTCです。ただし、0.001BTC以上であれば
+                      1satoshi単位まで細かい数量の指定が可能です。<br>
+                      (例) 0.00100001 BTC
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="name">価格</td>
+                    <td class="required">任意</td>
+                    <td class="type">number</td>
+                    <td class="description">
+                      ビットコインの注文価格を指定します。省略した場合は成行注文になります。
+                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-sell">trader.sell(数量, [価格])</div>
+            <p class="method-item-summary">
+              売り注文を発行します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.sell(2, 1000000);
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">object</td>
+                    <td class="description">注文idが含まれるオブジェクト。注文をキャンセルする時や、注文結果の確認等に使用します。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="name">引数</td>
+                    <td class="required">必須？</td>
+                    <td class="required">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="name">数量</td>
+                    <td class="required">必須</td>
+                    <td class="type">number</td>
+                    <td class="description">
+                      ビットコインの数量を指定します。単位はBTCです。
+                      最低数量は0.001BTCです。ただし、0.001BTC以上であれば
+                      1satoshi単位まで細かい数量の指定が可能です。<br>
+                      (例) 0.00100001 BTC
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="name">価格</td>
+                    <td class="required">任意</td>
+                    <td class="type">number</td>
+                    <td class="description">
+                      ビットコインの注文価格を指定します。省略した場合は成行注文になります。
+                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-settleAll">trader.settleAll()</div>
+            <p class="method-item-summary">
+              全ての建玉に対して反対方向の成行注文を発行します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.settleAll();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">全ての建玉に対するbuy/sellの返り値の配列</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-cancelAll">trader.cancelAll()</div>
+            <p class="method-item-summary">
+              アクティブな注文を全てキャンセルします。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.cancelAll();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Promise</td>
+                    <td class="description">キャンセルリクエストが完了時にonFulfilled/onRejectedコールバックが実行されます。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-cancel">trader.cancel(注文ID)</div>
+            <p class="method-item-summary">
+              指定したIDの注文をキャンセルします。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.cancel(19283);
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Promise</td>
+                    <td class="description">キャンセルリクエスト完了時にonFulfilled/onRejectedコールバックが実行されます。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="name">引数</td>
+                    <td class="required">必須？</td>
+                    <td class="required">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="name">注文ID</td>
+                    <td class="required">必須</td>
+                    <td class="type">number</td>
+                    <td class="description">
+                      trader.buy/sellの返り値のorderIDを指定します。
+                      指定したorderIDの注文が板に残った状態(ACTIVE)であった場合のみに
+                      キャンセルできます。約定済みの注文についてはキャンセルできません。
+                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="method-item">
+            <h4 class="method-item-header" id="trader-getLatestPrice">trader.getLatestPrice()</h4>
+            <p class="method-item-summary">
+              最新の価格を取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.getLatestPrice();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">number</td>
+                    <td class="description">
+                      最新のビットコイン価格。取引市場はbitFlyer FX。
+                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <h4 class="method-item-header" id="trader-getPositions">trader.getPositions()</h4>
+            <p class="method-item-summary">
+              現在の建玉を取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.getPositions();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">現在有効な建玉オブジェクトが格納された配列が返されます。<br>
+                      建玉オブジェクトのフォーマットは下記をご参考ください。<br>
+                      <pre>[
   {
     product_code: "FX_BTC_JPY", // FX_BTC_JPY固定です。
     side: "BUY", // "BUY" もしくは "SELL"。 売建か買建かを表します。
@@ -50,10 +364,42 @@ exportsオブジェクトは実行環境間で共有されます。
   },
   ...
 ]
-</pre></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="trader-getOpenOrders">trader.getOpenOrders()</div><p class="method-item-summary">未完了の注文を取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.getOpenOrders();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">現在有効な注文が格納された配列が返されます。<br>
-注文オブジェクトのフォーマットは下記をご参考ください。<br><pre>[
+</pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-getOpenOrders">trader.getOpenOrders()</div>
+            <p class="method-item-summary">
+              未完了の注文を取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.getOpenOrders();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">現在有効な注文が格納された配列が返されます。<br>
+                      注文オブジェクトのフォーマットは下記をご参考ください。<br>
+                      <pre>[
   {
     id: 0 , // ページング用のID
     child_order_id: "JOR20150707-084555-022523", // 注文ごとにユニークなID
@@ -74,16 +420,80 @@ exportsオブジェクトは実行環境間で共有されます。
   },
   ...
 }
-</pre></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="trader-getOrderHistory">trader.getOrderHistory()</div><p class="method-item-summary">注文履歴を取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.getOrderHistory();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">過去の注文が格納された配列が返されます。<br>
-現在アクティブな注文は含まれません<br>
-注文オブジェクトのフォーマットは上記のgetOpenOrders()と同じです。</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><h4 class="method-item-header" id="trader-getMarketState">trader.getMarketState()</h4><p class="method-item-summary">マーケットサーバの状態を取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.getMarketState();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">object</td><td class="description">サーバの負荷状況および板の状態を取得します。<br><pre>{
+</pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-getOrderHistory">trader.getOrderHistory()</div>
+            <p class="method-item-summary">
+              注文履歴を取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.getOrderHistory();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">過去の注文が格納された配列が返されます。<br>
+                      現在アクティブな注文は含まれません<br>
+                      注文オブジェクトのフォーマットは上記のgetOpenOrders()と同じです。
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <h4 class="method-item-header" id="trader-getMarketState">trader.getMarketState()</h4>
+            <p class="method-item-summary">
+              マーケットサーバの状態を取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.getMarketState();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">object</td>
+                    <td class="description">サーバの負荷状況および板の状態を取得します。<br>
+                      <pre>{
   health: "NORMAL",
   state: "RUNNING"
-}</pre>health/stateの種類は下記の通りです。(引用元: https://lightning.bitflyer.jp/docs/api)<pre>health: 取引所の稼動状態です。以下のいずれかの値をとります。
+}</pre>health/stateの種類は下記の通りです。(引用元: https://lightning.bitflyer.jp/docs/api)
+                      <pre>health: 取引所の稼動状態です。以下のいずれかの値をとります。
   NORMAL: 取引所は稼動しています。
   BUSY: 取引所に負荷がかかっている状態です。
   VERY BUSY: 取引所の負荷が大きい状態です。
@@ -102,10 +512,42 @@ state: 板の状態です。以下の値をとります。
   data: 板の状態について、付加情報を提供します。
   special_quotation: Lightning Futures の SQ（清算値）
 ※今後、表示項目について変更・追加の可能性はございます。予め了承ください。
-</pre></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="trader-getMarginHistory">trader.getMarginHistory()</div><p class="method-item-summary">決済履歴を取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.getMarginHistory();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">決済履歴の配列を取得します。<br>
-決済履歴オブジェクトのフォーマットは下記をご参考ください。<pre>[
+</pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-getMarginHistory">trader.getMarginHistory()</div>
+            <p class="method-item-summary">
+              決済履歴を取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.getMarginHistory();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">決済履歴の配列を取得します。<br>
+                      決済履歴オブジェクトのフォーマットは下記をご参考ください。
+                      <pre>[
   {
     id: 10,
     margin: -102930, // 証拠金の変動額です。
@@ -115,10 +557,42 @@ state: 板の状態です。以下の値をとります。
   },
   ...
 ]
-</pre></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="trader-getExecutions">trader.getExecutions()</div><p class="method-item-summary">約定履歴を取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.getExecutions();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">約定履歴の配列を取得します。<br>
-約定履歴オブジェクトのフォーマットは下記をご参考ください。<pre>[
+</pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-getExecutions">trader.getExecutions()</div>
+            <p class="method-item-summary">
+              約定履歴を取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.getExecutions();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">約定履歴の配列を取得します。<br>
+                      約定履歴オブジェクトのフォーマットは下記をご参考ください。
+                      <pre>[
   {
     "id": 37233,
     "child_order_id": "JOR20150707-060559-021935",
@@ -132,24 +606,161 @@ state: 板の状態です。以下の値をとります。
   },
   ...
 ]</pre>statusの値は"UNCONFIRMED"/"CONFIRMED"のいずれかになります。<br>
-UNCONFIRMEDは約定に対応する建玉の増減が未確認であることを示します。
-例えば、2.1BTCの買いの約定があった場合、約定の前後で2.1BTC分
-買い玉が増えるか、売り玉が減ることになります。この約定数量に対応する建玉の増減が
-確認できた場合、statusが"CONFIRMED"になります。</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div></div></div><div class="hr"></div><div class="class-item" style="margin-top: 15px;"><div class="class-item-header">monitor</div><p class="class-item-summary">マーケットのチャートデータ等を保持しているインスタンスです。
-</p><div class="methods"><div class="method-item"><div class="method-item-header" id="monitor-getChart">monitor.getChart(分足, 時点, タイプ)</div><p class="method-item-summary">価格のチャートを取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>trader.getChart("1", "latest", "max");
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">number</td><td class="description">指定したチャートタイプの価格値を取得します。
-(例) 1分足の最新の足の最高価格</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div><table><thead><tr><td class="name">引数</td><td class="required">必須？</td><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="name">分足</td><td class="required">必須</td><td class="type">string</td><td class="description">チャートの分足を指定します。デフォルトでは0.2, 1, 3, 5, 15分足が指定できます。</td></tr><tr><td class="name">時点</td><td class="required">必須</td><td class="type">number | string</td><td class="description">現在と比較して何本前の足のローソクデータを取得するか指定します。
-"latest"は0と等価です。</td></tr><tr><td class="name">タイプ</td><td class="required">必須</td><td class="type">string</td><td class="description">取得するローソク足データの種類を指定します。<br>
-"max", "min", "start", "last", "volume", "size", "avg", "diff"が指定できます。<br>
-それぞれ、高値、安値、始値、終値、出来高(円ベース)、総取引数量(BTCベース)、平均値、終値と始値の差を表します。
-</td></tr></tbody></table></div></div><div class="method-item"><div class="method-item-header" id="monitor-SMA">monitor.SMA(分足, 種類, チャート本数)</div><p class="method-item-summary">価格の単純移動平均を取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>monitor.SMA(3, "volume", 10);
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">number</td><td class="description">指定したチャートデータの単純移動平均<br>
-例えばSMA("1", "start", 10)は、1分足チャートの過去10足(10分)の
-始値の移動平均を取得します。</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="monitor-board">monitor.board()</div><p class="method-item-summary">板気配を取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>monitor.board();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">object</td><td class="description">板を表現する下記のようなオブジェクトを取得します。<pre>{
+                      UNCONFIRMEDは約定に対応する建玉の増減が未確認であることを示します。
+                      例えば、2.1BTCの買いの約定があった場合、約定の前後で2.1BTC分
+                      買い玉が増えるか、売り玉が減ることになります。この約定数量に対応する建玉の増減が
+                      確認できた場合、statusが"CONFIRMED"になります。
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div class="class-item" style="margin-top: 15px;">
+        <div class="class-item-header">monitor</div>
+        <p class="class-item-summary">
+          マーケットのチャートデータ等を保持しているインスタンスです。
+          
+        </p>
+        <div class="methods">
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-getChart">monitor.getChart(分足, 時点, タイプ)</div>
+            <p class="method-item-summary">
+              価格のチャートを取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>trader.getChart("1", "latest", "max");
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">number</td>
+                    <td class="description">
+                      指定したチャートタイプの価格値を取得します。
+                      (例) 1分足の最新の足の最高価格
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="name">引数</td>
+                    <td class="required">必須？</td>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="name">分足</td>
+                    <td class="required">必須</td>
+                    <td class="type">string</td>
+                    <td class="description">チャートの分足を指定します。デフォルトでは0.2, 1, 3, 5, 15分足が指定できます。</td>
+                  </tr>
+                  <tr>
+                    <td class="name">時点</td>
+                    <td class="required">必須</td>
+                    <td class="type">number | string</td>
+                    <td class="description">
+                      現在と比較して何本前の足のローソクデータを取得するか指定します。
+                      "latest"は0と等価です。
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="name">タイプ</td>
+                    <td class="required">必須</td>
+                    <td class="type">string</td>
+                    <td class="description">取得するローソク足データの種類を指定します。<br>
+                      "max", "min", "start", "last", "volume", "size", "avg", "diff"が指定できます。<br>
+                      それぞれ、高値、安値、始値、終値、出来高(円ベース)、総取引数量(BTCベース)、平均値、終値と始値の差を表します。
+                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-SMA">monitor.SMA(分足, 種類, チャート本数)</div>
+            <p class="method-item-summary">
+              価格の単純移動平均を取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>monitor.SMA(3, "volume", 10);
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">number</td>
+                    <td class="description">指定したチャートデータの単純移動平均<br>
+                      例えばSMA("1", "start", 10)は、1分足チャートの過去10足(10分)の
+                      始値の移動平均を取得します。
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-board">monitor.board()</div>
+            <p class="method-item-summary">
+              板気配を取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>monitor.board();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">object</td>
+                    <td class="description">板を表現する下記のようなオブジェクトを取得します。
+                      <pre>{
   "mid_price": 1000980,
   "asks": [
     {price: 1001000, size: 1.20394},
@@ -160,9 +771,41 @@ UNCONFIRMEDは約定に対応する建玉の増減が未確認であることを
     ...
   ]
 }
-</pre></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="monitor-ticker">monitor.ticker()</div><p class="method-item-summary">ティッカーを取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>monitor.ticker();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">object</td><td class="description">ティッカー情報を取得します。<br><pre>{
+</pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-ticker">monitor.ticker()</div>
+            <p class="method-item-summary">
+              ティッカーを取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>monitor.ticker();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">object</td>
+                    <td class="description">ティッカー情報を取得します。<br>
+                      <pre>{
   "product_code": "BTC_FX_JPY",
   "timestamp": "2015-07-08T02:50:59.97",
   "tick_id": 3579,
@@ -176,11 +819,43 @@ UNCONFIRMEDは約定に対応する建玉の増減が未確認であることを
   "volume": 16819.26,
   "volume_by_product": 6819.26
 }</pre>timestamp: 時刻は UTC（協定世界時）で表されます。<br>
-ltp: 最終取引価格 <br>
-volume: 24 時間の取引量<br>
-引用元: https://lightning.bitflyer.jp/docs?lang=ja</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="monitor-execution">monitor.execution()</div><p class="method-item-summary">約定履歴を取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>monitor.execution();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">約定履歴の配列を取得します。<br><pre>[
+                      ltp: 最終取引価格 <br>
+                      volume: 24 時間の取引量<br>
+                      引用元: https://lightning.bitflyer.jp/docs?lang=ja
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-execution">monitor.execution()</div>
+            <p class="method-item-summary">
+              約定履歴を取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>monitor.execution();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">約定履歴の配列を取得します。<br>
+                      <pre>[
   {
     "id": 39361,
     "side": "SELL",
@@ -190,16 +865,96 @@ volume: 24 時間の取引量<br>
     "buy_child_order_acceptance_id": "JRF20150707-014356-184990",
     "sell_child_order_acceptance_id": "JRF20150707-104433-186048"
   }
-]</pre>引用元: https://lightning.bitflyer.jp/docs?lang=ja</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="monitor-bids">monitor.bids()</div><p class="method-item-summary">板の買い気配を取得します。
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>monitor.bids();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">買い板の気配値を取得します。<br><pre>[
+]</pre>引用元: https://lightning.bitflyer.jp/docs?lang=ja
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-bids">monitor.bids()</div>
+            <p class="method-item-summary">
+              板の買い気配を取得します。
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>monitor.bids();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">買い板の気配値を取得します。<br>
+                      <pre>[
   {price: 1001000, size: 1.20394},
   ...
-]</pre>配列は価格の降順にソート済みです。最も高い買値がindex:0に格納されています。</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div><div class="method-item"><div class="method-item-header" id="monitor-asks">monitor.asks()</div><p class="method-item-summary">板の売り気配を取得します。</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div><pre>monitor.asks();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div><table><thead><tr><td class="type">型</td><td class="description">説明</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">売り板の気配値を取得します。<br><pre>[
+]</pre>配列は価格の降順にソート済みです。最も高い買値がindex:0に格納されています。
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-asks">monitor.asks()</div>
+            <p class="method-item-summary">板の売り気配を取得します。</p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>例</div>
+              <pre>monitor.asks();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>戻り値</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">型</td>
+                    <td class="description">説明</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">売り板の気配値を取得します。<br>
+                      <pre>[
   {price: 1001000, size: 1.20394},
   ...
-]</pre>配列は価格の昇順にソート済みです。最も安い売値がindex:0に格納されています。</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし</div></div></div></div></div><div class="hr"></div><div class="sample-code"><div class="sample-code-header">サンプルコード</div><div class="sample-code-item"><div class="sample-code-item-header" id="trade-every-10mins">10秒毎に買い注文、売り注文を交互に出すコード</div><pre class="sample-code-body">var 売買フラグ = true;
+]</pre>配列は価格の昇順にソート済みです。最も安い売値がindex:0に格納されています。
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>引数</div>引数なし
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="sample-code">
+      <div class="sample-code-header">サンプルコード</div>
+      <div class="sample-code-item">
+        <div class="sample-code-item-header" id="trade-every-10mins">10秒毎に買い注文、売り注文を交互に出すコード</div>
+        <pre class="sample-code-body">var 売買フラグ = true;
 var インターバル = 10*1000; // 10000ミリ秒 = 10秒
 
 setInterval(function(){
@@ -211,15 +966,26 @@ setInterval(function(){
   }
   売買フラグ = !売買フラグ;
 }, インターバル);
-</pre></div></div><div id="api-reference-index"><div class="index-caption">目次</div><ul></ul></div><script>var $index = $("#api-reference-index");
-var $ul = $index.find("ul");
-$ul.append("<li class='index-category'>API</li>");
-$(".method-item-header").each(function(i){
-  $ul.append("<li><a href=#" + $(this).attr("id") + ">" + $(this).text() + "</a></li>");
-});
-$ul.append("<li class='index-category'>サンプルコード</li>");
-$(".sample-code-item-header").each(function(i){
-  $ul.append("<li><a href=#" + $(this).attr("id") + ">" + $(this).text() + "</a></li>");
-});
-$("body").niceScroll();
-$index.find("ul").niceScroll();</script></body></html>
+</pre>
+      </div>
+    </div>
+    <div id="api-reference-index">
+      <div class="index-caption">目次</div>
+      <ul></ul>
+    </div>
+    <script>
+      var $index = $("#api-reference-index");
+      var $ul = $index.find("ul");
+      $ul.append("<li class='index-category'>API</li>");
+      $(".method-item-header").each(function(i){
+        $ul.append("<li><a href=#" + $(this).attr("id") + ">" + $(this).text() + "</a></li>");
+      });
+      $ul.append("<li class='index-category'>サンプルコード</li>");
+      $(".sample-code-item-header").each(function(i){
+        $ul.append("<li><a href=#" + $(this).attr("id") + ">" + $(this).text() + "</a></li>");
+      });
+      $("body").niceScroll();
+      $index.find("ul").niceScroll();
+    </script>
+  </body>
+</html>

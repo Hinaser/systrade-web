@@ -1,39 +1,352 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><link href="../css/main.css" rel="stylesheet"><script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script></head><body class="theme-dark" id="api-reference-contents"><div class="api-reference-header"><div class="api-reference-title">API Reference</div><div class="hr"></div><p>In SysTrade, you can compose bitcoin trade algorithm by Javascript.<br>
-Here I introduce how to write actual programmed order and available APIs.</p><p>All APIs described here can be executed in `Machine Order` tab.<br>
-For example, if you write `trader.buy(2)` and execute in Machine Order tab,
-an order to buy 2 BTC for market price will be requested.
-</p></div><div class="sharing-data"><div class="sharing-data-header">Shared variables</div><p>Every time you execute a program in Machine Order tab, new execution environment is created.<br>
-This means local variables declared in previous execution cannot be accessed in next execution.<br>
-But don't worry. You can bring those local variables into next execution context by assigning
-the values into `exports` object as following.</p><p>exports["name"] = value;</p><p>exports Object is shared among whole execution contexts.
-</p></div><div class="classes"><div class="classes-header">API</div><div class="hr"></div><div class="class-item"><div class="class-item-header">trader</div><p class="class-item-summary">You can request an order, settle positions, cancel orders with `trader` instance.
-</p><div class="methods"><div class="method-item"><div class="method-item-header" id="trader-buy">trader.buy(amount, [price])</div><p class="method-item-summary">Request a bid order.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.buy(2, 1000000);
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">object</td><td class="description">Object having order id. The id is used to cancel order or find order.</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div><table><thead><tr><td class="name">arg</td><td class="required">Is required？</td><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="name">Amount</td><td class="required">Required</td><td class="type">number</td><td class="description">Specify bit coin amount you want to buy. The unit is BTC.
-Minimum amount is 0.001 BTC. Keep in mind that if amount is more than
-or equal to 0.001 BTC, you can specify as small digit as 1 satoshi (10e-8 BTC). <br>
-i.e. 0.00100001 BTC</td></tr><tr><td class="name">Price</td><td class="required">Optional</td><td class="type">number</td><td class="description">Specify order price of bitcoin. If you omit this argument, order is requested as market order.
-</td></tr></tbody></table></div></div><div class="method-item"><div class="method-item-header" id="trader-sell">trader.sell(amount, [price])</div><p class="method-item-summary">Request an ask order.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.sell(2, 1000000);
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">object</td><td class="description">Object having order id. The id is used to cancel order or find order.</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div><table><thead><tr><td class="name">arg</td><td class="required">Is required？</td><td class="required">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="name">amount</td><td class="required">Required</td><td class="type">number</td><td class="description">Specify bit coin amount you want to buy. The unit is BTC.
-Minimum amount is 0.001 BTC. Keep in mind that if amount is more than
-or equal to 0.001 BTC, you can specify as small digit as 1 satoshi (10e-8 BTC). <br>
-i.e. 0.00100001 BTC</td></tr><tr><td class="name">price</td><td class="required">Optional</td><td class="type">number</td><td class="description">Object having order id. The id is used to cancel order or find order.</td></tr></tbody></table></div></div><div class="method-item"><div class="method-item-header" id="trader-settleAll">trader.settleAll()</div><p class="method-item-summary">Settle all positions by requesting opposite market orders.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.settleAll();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">Array of return values of `trader.buy` or `trader.sell` for all positions.</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><div class="method-item-header" id="trader-cancelAll">trader.cancelAll()</div><p class="method-item-summary">Cancel all actve orders.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.cancelAll();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">Promise</td><td class="description">Promise will be resolved when response of cancel request is returned by market server.</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><div class="method-item-header" id="trader-cancel">trader.cancel(orderID)</div><p class="method-item-summary">Cancel an order of specified orderID.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.cancel(19283);
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">Promise</td><td class="description">Promise will be resolved when response of cancel request is returned by market server.</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div><table><thead><tr><td class="name">arg</td><td class="required">Is required？</td><td class="required">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="name">orderID</td><td class="required">Required</td><td class="type">number</td><td class="description">Specify order id returned by `trader.buy()` or `trader.sell()`.
-You can only cancel an order if it is still active on board.
-You cannot cancel completed order.
-</td></tr></tbody></table></div></div><div class="method-item"><h4 class="method-item-header" id="trader-getLatestPrice">trader.getLatestPrice()</h4><p class="method-item-summary">Get the latest bitcoin price.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.getLatestPrice();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">number</td><td class="description">The latest bitcoin price on bitFlyer FX market.
-</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><h4 class="method-item-header" id="trader-getPositions">trader.getPositions()</h4><p class="method-item-summary">Get current positions.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.getPositions();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">An array of active position objects is returned.<br>
-The format of the object is as follows:<br><pre>[
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link href="../css/main.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  </head>
+  <body class="theme-dark" id="api-reference-contents">
+    <div class="api-reference-header">
+      <div class="api-reference-title">API Reference</div>
+      <div class="hr"></div>
+      <p>In SysTrade, you can compose bitcoin trade algorithm by Javascript.<br>
+        Here I introduce how to write actual programmed order and available APIs.
+      </p>
+      <p>All APIs described here can be executed in `Machine Order` tab.<br>
+        For example, if you write `trader.buy(2)` and execute in Machine Order tab,
+        an order to buy 2 BTC for market price will be requested.
+        
+      </p>
+    </div>
+    <div class="sharing-data">
+      <div class="sharing-data-header">Shared variables</div>
+      <p>Every time you execute a program in Machine Order tab, new execution environment is created.<br>
+        This means local variables declared in previous execution cannot be accessed in next execution.<br>
+        But don't worry. You can bring those local variables into next execution context by assigning
+        the values into `exports` object as following.
+      </p>
+      <p>exports["name"] = value;</p>
+      <p>
+        exports Object is shared among whole execution contexts.
+        
+      </p>
+    </div>
+    <div class="classes">
+      <div class="classes-header">API</div>
+      <div class="hr"></div>
+      <div class="class-item">
+        <div class="class-item-header">trader</div>
+        <p class="class-item-summary">
+          You can request an order, settle positions, cancel orders with `trader` instance.
+          
+        </p>
+        <div class="methods">
+          <div class="method-item">
+            <div class="method-item-header" id="trader-buy">trader.buy(amount, [price])</div>
+            <p class="method-item-summary">
+              Request a bid order.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.buy(2, 1000000);
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">object</td>
+                    <td class="description">Object having order id. The id is used to cancel order or find order.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="name">arg</td>
+                    <td class="required">Is required？</td>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="name">Amount</td>
+                    <td class="required">Required</td>
+                    <td class="type">number</td>
+                    <td class="description">
+                      Specify bit coin amount you want to buy. The unit is BTC.
+                      Minimum amount is 0.001 BTC. Keep in mind that if amount is more than
+                      or equal to 0.001 BTC, you can specify as small digit as 1 satoshi (10e-8 BTC). <br>
+                      i.e. 0.00100001 BTC
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="name">Price</td>
+                    <td class="required">Optional</td>
+                    <td class="type">number</td>
+                    <td class="description">
+                      Specify order price of bitcoin. If you omit this argument, order is requested as market order.
+                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-sell">trader.sell(amount, [price])</div>
+            <p class="method-item-summary">
+              Request an ask order.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.sell(2, 1000000);
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">object</td>
+                    <td class="description">Object having order id. The id is used to cancel order or find order.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="name">arg</td>
+                    <td class="required">Is required？</td>
+                    <td class="required">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="name">amount</td>
+                    <td class="required">Required</td>
+                    <td class="type">number</td>
+                    <td class="description">
+                      Specify bit coin amount you want to buy. The unit is BTC.
+                      Minimum amount is 0.001 BTC. Keep in mind that if amount is more than
+                      or equal to 0.001 BTC, you can specify as small digit as 1 satoshi (10e-8 BTC). <br>
+                      i.e. 0.00100001 BTC
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="name">price</td>
+                    <td class="required">Optional</td>
+                    <td class="type">number</td>
+                    <td class="description">Object having order id. The id is used to cancel order or find order.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-settleAll">trader.settleAll()</div>
+            <p class="method-item-summary">
+              Settle all positions by requesting opposite market orders.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.settleAll();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">Array of return values of `trader.buy` or `trader.sell` for all positions.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-cancelAll">trader.cancelAll()</div>
+            <p class="method-item-summary">
+              Cancel all actve orders.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.cancelAll();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Promise</td>
+                    <td class="description">Promise will be resolved when response of cancel request is returned by market server.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-cancel">trader.cancel(orderID)</div>
+            <p class="method-item-summary">
+              Cancel an order of specified orderID.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.cancel(19283);
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Promise</td>
+                    <td class="description">Promise will be resolved when response of cancel request is returned by market server.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="name">arg</td>
+                    <td class="required">Is required？</td>
+                    <td class="required">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="name">orderID</td>
+                    <td class="required">Required</td>
+                    <td class="type">number</td>
+                    <td class="description">
+                      Specify order id returned by `trader.buy()` or `trader.sell()`.
+                      You can only cancel an order if it is still active on board.
+                      You cannot cancel completed order.
+                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="method-item">
+            <h4 class="method-item-header" id="trader-getLatestPrice">trader.getLatestPrice()</h4>
+            <p class="method-item-summary">
+              Get the latest bitcoin price.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.getLatestPrice();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">number</td>
+                    <td class="description">
+                      The latest bitcoin price on bitFlyer FX market.
+                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <h4 class="method-item-header" id="trader-getPositions">trader.getPositions()</h4>
+            <p class="method-item-summary">
+              Get current positions.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.getPositions();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">An array of active position objects is returned.<br>
+                      The format of the object is as follows:<br>
+                      <pre>[
   {
     product_code: "FX_BTC_JPY", // Fixed to FX_BTC_JPY
     side: "BUY", // "BUY" or "SELL"。 Bid position or Ask position
@@ -48,10 +361,42 @@ The format of the object is as follows:<br><pre>[
   },
   ...
 ]
-</pre></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Argument</div>No argument</div></div><div class="method-item"><div class="method-item-header" id="trader-getOpenOrders">trader.getOpenOrders()</div><p class="method-item-summary">Get uncompleted active orders
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.getOpenOrders();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">An array of all active orders is returned.<br>
-The format of the order object is as follows:<br><pre>[
+</pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Argument</div>No argument
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-getOpenOrders">trader.getOpenOrders()</div>
+            <p class="method-item-summary">
+              Get uncompleted active orders
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.getOpenOrders();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">An array of all active orders is returned.<br>
+                      The format of the order object is as follows:<br>
+                      <pre>[
   {
     id: 0 , // ID to use paging. Keep in mind this is not an id for canceling.
     child_order_id: "JOR20150707-084555-022523", // Unique ID over orders
@@ -72,17 +417,81 @@ The format of the order object is as follows:<br><pre>[
   },
   ...
 }
-</pre></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><div class="method-item-header" id="trader-getOrderHistory">trader.getOrderHistory()</div><p class="method-item-summary">Get history of orders.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.getOrderHistory();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">An array of closed orders is returned.<br>
-Active orders are not included in the array.<br>
-The format of the array is the same as getOpenOrders().
-</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><h4 class="method-item-header" id="trader-getMarketState">trader.getMarketState()</h4><p class="method-item-summary">Get market server status.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.getMarketState();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">object</td><td class="description">Get server load and board state.<br><pre>{
+</pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-getOrderHistory">trader.getOrderHistory()</div>
+            <p class="method-item-summary">
+              Get history of orders.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.getOrderHistory();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">An array of closed orders is returned.<br>
+                      Active orders are not included in the array.<br>
+                      The format of the array is the same as getOpenOrders().
+                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <h4 class="method-item-header" id="trader-getMarketState">trader.getMarketState()</h4>
+            <p class="method-item-summary">
+              Get market server status.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.getMarketState();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">object</td>
+                    <td class="description">Get server load and board state.<br>
+                      <pre>{
   health: "NORMAL",
   state: "RUNNING"
-}</pre>The values of health/state are as follows: (source: https://lightning.bitflyer.jp/docs/api)<pre>health: The load status of market server. Value is one of the followings:
+}</pre>The values of health/state are as follows: (source: https://lightning.bitflyer.jp/docs/api)
+                      <pre>health: The load status of market server. Value is one of the followings:
   NORMAL: Server is running normally.
   BUSY: Server is running but overloaded.
   VERY BUSY: Server load is heavy.
@@ -100,10 +509,42 @@ state: The board state.
   MATURED: Lightning Futures has reached mature.
   data: Additional data
   special_quotation: SQ of Lightning Futures
-</pre></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><div class="method-item-header" id="trader-getMarginHistory">trader.getMarginHistory()</div><p class="method-item-summary">Get settlement history.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.getMarginHistory();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">Get an array of settlement history.<br>
-The format of the object array is as follows:<pre>[
+</pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-getMarginHistory">trader.getMarginHistory()</div>
+            <p class="method-item-summary">
+              Get settlement history.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.getMarginHistory();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">Get an array of settlement history.<br>
+                      The format of the object array is as follows:
+                      <pre>[
   {
     id: 10,
     margin: -102930, // Difference of collateral for settlement.
@@ -113,10 +554,42 @@ The format of the object array is as follows:<pre>[
   },
   ...
 ]
-</pre></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><div class="method-item-header" id="trader-getExecutions">trader.getExecutions()</div><p class="method-item-summary">Get history of executions.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.getExecutions();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">Get an array of executions history.<br>
-The format of object array is as follows:<br><pre>[
+</pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="trader-getExecutions">trader.getExecutions()</div>
+            <p class="method-item-summary">
+              Get history of executions.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.getExecutions();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">Get an array of executions history.<br>
+                      The format of object array is as follows:<br>
+                      <pre>[
   {
     "id": 37233,
     "child_order_id": "JOR20150707-060559-021935",
@@ -130,25 +603,163 @@ The format of object array is as follows:<br><pre>[
   },
   ...
 ]</pre>The value of ext.status is either "UNCONFIRMED" or "CONFIRME".<br>
-UNCONFIRMED means diff of position size which should be made by the execution is not confirmed yet.<br>
-For example, if there is a bid execution of 2.1 BTC, there must be position size change associated with the execution.<br>
-That is, after execution bid position size increases by 2.1 BTC, or ask position size decreases by 2.1 BTC.
-When SysTrade confirms those position size move, status turns to be "CONFIRMED".</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div></div></div><div class="hr"></div><div class="class-item" style="margin-top: 15px;"><div class="class-item-header">monitor</div><p class="class-item-summary">An instance of market monitor which stores chart, board, execution data.
-</p><div class="methods"><div class="method-item"><div class="method-item-header" id="monitor-getChart">monitor.getChart(minuteFoot, index, type)</div><p class="method-item-summary">Get value from candlestick chart
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>trader.getChart("1", "latest", "max");
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">number</td><td class="description">Get value from designated chart type.
-i.e. The max price in the latest 1 min chart.</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div><table><thead><tr><td class="name">arg</td><td class="required">Is required？</td><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="name">minuteFoot</td><td class="required">Required</td><td class="type">string</td><td class="description">Specify chart minute value. By default one of "0.2", "1", "3", "5", "15" is available.</td></tr><tr><td class="name">index</td><td class="required">Required</td><td class="type">number | string</td><td class="description">Specify index of candle stick from the latest candlestick. 0 means the latest stick.
-3 means 3 previous stick. "latest" is equal to 0.</td></tr><tr><td class="name">type</td><td class="required">Required</td><td class="type">string</td><td class="description">Specify type of candlestick data.<br>
-Possible value is one of "max", "min", "start", "last", "volume", "size", "avg", "diff".<br>
-Each represents "highest price", "lowest price", "opening price", "closing price", "total trade volume in JPY",
-"total trade volume in BTC", "average price", "Difference between closing and opening price" of a designated candle chart.
-</td></tr></tbody></table></div></div><div class="method-item"><div class="method-item-header" id="monitor-SMA">monitor.SMA(minuteFoot, type, numOfSticks)</div><p class="method-item-summary">Get simple moving average of candle stick chart.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>monitor.SMA(3, "volume", 10);
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">number</td><td class="description">Simple moving average value of specified chart data.
-i.e. SMA("1", "start", 10) gets sma of opening price of 1 minute chart
-among 10 sticks.</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><div class="method-item-header" id="monitor-board">monitor.board()</div><p class="method-item-summary">Get order board.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>monitor.board();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">object</td><td class="description">Get an object representing orders on board.<pre>{
+                      UNCONFIRMED means diff of position size which should be made by the execution is not confirmed yet.<br>
+                      For example, if there is a bid execution of 2.1 BTC, there must be position size change associated with the execution.<br>
+                      That is, after execution bid position size increases by 2.1 BTC, or ask position size decreases by 2.1 BTC.
+                      When SysTrade confirms those position size move, status turns to be "CONFIRMED".
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div class="class-item" style="margin-top: 15px;">
+        <div class="class-item-header">monitor</div>
+        <p class="class-item-summary">
+          An instance of market monitor which stores chart, board, execution data.
+          
+        </p>
+        <div class="methods">
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-getChart">monitor.getChart(minuteFoot, index, type)</div>
+            <p class="method-item-summary">
+              Get value from candlestick chart
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>trader.getChart("1", "latest", "max");
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">number</td>
+                    <td class="description">
+                      Get value from designated chart type.
+                      i.e. The max price in the latest 1 min chart.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="name">arg</td>
+                    <td class="required">Is required？</td>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="name">minuteFoot</td>
+                    <td class="required">Required</td>
+                    <td class="type">string</td>
+                    <td class="description">Specify chart minute value. By default one of "0.2", "1", "3", "5", "15" is available.</td>
+                  </tr>
+                  <tr>
+                    <td class="name">index</td>
+                    <td class="required">Required</td>
+                    <td class="type">number | string</td>
+                    <td class="description">
+                      Specify index of candle stick from the latest candlestick. 0 means the latest stick.
+                      3 means 3 previous stick. "latest" is equal to 0.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="name">type</td>
+                    <td class="required">Required</td>
+                    <td class="type">string</td>
+                    <td class="description">Specify type of candlestick data.<br>
+                      Possible value is one of "max", "min", "start", "last", "volume", "size", "avg", "diff".<br>
+                      Each represents "highest price", "lowest price", "opening price", "closing price", "total trade volume in JPY",
+                      "total trade volume in BTC", "average price", "Difference between closing and opening price" of a designated candle chart.
+                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-SMA">monitor.SMA(minuteFoot, type, numOfSticks)</div>
+            <p class="method-item-summary">
+              Get simple moving average of candle stick chart.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>monitor.SMA(3, "volume", 10);
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">number</td>
+                    <td class="description">
+                      Simple moving average value of specified chart data.
+                      i.e. SMA("1", "start", 10) gets sma of opening price of 1 minute chart
+                      among 10 sticks.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-board">monitor.board()</div>
+            <p class="method-item-summary">
+              Get order board.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>monitor.board();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">object</td>
+                    <td class="description">Get an object representing orders on board.
+                      <pre>{
   "mid_price": 1000980,
   "asks": [
     {price: 1001000, size: 1.20394},
@@ -159,9 +770,41 @@ among 10 sticks.</td></tr></tbody></table></div><div class="method-item-syntax">
     ...
   ]
 }
-</pre></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><div class="method-item-header" id="monitor-ticker">monitor.ticker()</div><p class="method-item-summary">Get ticker.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>monitor.ticker();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">object</td><td class="description">Get ticker info.<br><pre>{
+</pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-ticker">monitor.ticker()</div>
+            <p class="method-item-summary">
+              Get ticker.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>monitor.ticker();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">object</td>
+                    <td class="description">Get ticker info.<br>
+                      <pre>{
   "product_code": "BTC_FX_JPY",
   "timestamp": "2015-07-08T02:50:59.97",
   "tick_id": 3579,
@@ -175,11 +818,43 @@ among 10 sticks.</td></tr></tbody></table></div><div class="method-item-syntax">
   "volume": 16819.26,
   "volume_by_product": 6819.26
 }</pre>timestamp: in UTC.<br>
-ltp: Last traded price <br>
-volume: Total traded volume in 24 hours.<br>
-<Refers to https://lightning.bitflyer.jp/docs?lang=ja></td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><div class="method-item-header" id="monitor-execution">monitor.execution()</div><p class="method-item-summary">Get public execution history.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>monitor.execution();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">Get an array of execution history<br><pre>[
+                      ltp: Last traded price <br>
+                      volume: Total traded volume in 24 hours.<br>
+                      <Refers to https://lightning.bitflyer.jp/docs?lang=ja>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-execution">monitor.execution()</div>
+            <p class="method-item-summary">
+              Get public execution history.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>monitor.execution();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">Get an array of execution history<br>
+                      <pre>[
   {
     "id": 39361,
     "side": "SELL",
@@ -189,16 +864,96 @@ volume: Total traded volume in 24 hours.<br>
     "buy_child_order_acceptance_id": "JRF20150707-014356-184990",
     "sell_child_order_acceptance_id": "JRF20150707-104433-186048"
   }
-]</pre>Source: https://lightning.bitflyer.jp/docs?lang=ja</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><div class="method-item-header" id="monitor-bids">monitor.bids()</div><p class="method-item-summary">Get bid orders on board.
-</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>monitor.bids();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">Get bid orders on board.<br><pre>[
+]</pre>Source: https://lightning.bitflyer.jp/docs?lang=ja
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-bids">monitor.bids()</div>
+            <p class="method-item-summary">
+              Get bid orders on board.
+              
+            </p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>monitor.bids();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">Get bid orders on board.<br>
+                      <pre>[
   {price: 1001000, size: 1.20394},
   ...
-]</pre>Array is sorted in descending order of price. The highest bid price is stored in index:0.</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div><div class="method-item"><div class="method-item-header" id="monitor-asks">monitor.asks()</div><p class="method-item-summary">Get ask orders on board.</p><div class="method-item-example"><div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div><pre>monitor.asks();
-</pre></div><div class="method-item-return"><div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div><table><thead><tr><td class="type">type</td><td class="description">description</td></tr></thead><tbody><tr><td class="type">Array</td><td class="description">Get ask orders on board.<br><pre>[
+]</pre>Array is sorted in descending order of price. The highest bid price is stored in index:0.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+          <div class="method-item">
+            <div class="method-item-header" id="monitor-asks">monitor.asks()</div>
+            <p class="method-item-summary">Get ask orders on board.</p>
+            <div class="method-item-example">
+              <div class="method-item-example-header"><i class="far fa-dot-circle"></i>example</div>
+              <pre>monitor.asks();
+</pre>
+            </div>
+            <div class="method-item-return">
+              <div class="method-item-return-header"><i class="far fa-dot-circle"></i>Return value</div>
+              <table>
+                <thead>
+                  <tr>
+                    <td class="type">type</td>
+                    <td class="description">description</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="type">Array</td>
+                    <td class="description">Get ask orders on board.<br>
+                      <pre>[
   {price: 1001000, size: 1.20394},
   ...
-]</pre>Array is sorted in ascending order of price. The lowest price is stored in index:0.</td></tr></tbody></table></div><div class="method-item-syntax"><div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments</div></div></div></div></div><div class="hr"></div><div class="sample-code"><div class="sample-code-header">Sample code</div><div class="sample-code-item"><div class="sample-code-item-header" id="trade-every-10mins">Script to send a bid/ask order every 10 seconds.</div><pre class="sample-code-body">var flag = true;
+]</pre>Array is sorted in ascending order of price. The lowest price is stored in index:0.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="method-item-syntax">
+              <div class="method-item-syntax-header"><i class="far fa-dot-circle"></i>Arguments</div>No arguments
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="sample-code">
+      <div class="sample-code-header">Sample code</div>
+      <div class="sample-code-item">
+        <div class="sample-code-item-header" id="trade-every-10mins">Script to send a bid/ask order every 10 seconds.</div>
+        <pre class="sample-code-body">var flag = true;
 var interval = 10*1000; // 10000 milli seconds = 10 seconds
 
 setInterval(function(){
@@ -210,15 +965,26 @@ setInterval(function(){
   }
   flag = !flag;
 }, interval);
-</pre></div></div><div id="api-reference-index"><div class="index-caption">Index</div><ul></ul></div><script>var $index = $("#api-reference-index");
-var $ul = $index.find("ul");
-$ul.append("<li class='index-category'>API</li>");
-$(".method-item-header").each(function(i){
-  $ul.append("<li><a href=#" + $(this).attr("id") + ">" + $(this).text() + "</a></li>");
-});
-$ul.append("<li class='index-category'>Sample code</li>");
-$(".sample-code-item-header").each(function(i){
-  $ul.append("<li><a href=#" + $(this).attr("id") + ">" + $(this).text() + "</a></li>");
-});
-$("body").niceScroll();
-$index.find("ul").niceScroll();</script></body></html>
+</pre>
+      </div>
+    </div>
+    <div id="api-reference-index">
+      <div class="index-caption">Index</div>
+      <ul></ul>
+    </div>
+    <script>
+      var $index = $("#api-reference-index");
+      var $ul = $index.find("ul");
+      $ul.append("<li class='index-category'>API</li>");
+      $(".method-item-header").each(function(i){
+        $ul.append("<li><a href=#" + $(this).attr("id") + ">" + $(this).text() + "</a></li>");
+      });
+      $ul.append("<li class='index-category'>Sample code</li>");
+      $(".sample-code-item-header").each(function(i){
+        $ul.append("<li><a href=#" + $(this).attr("id") + ">" + $(this).text() + "</a></li>");
+      });
+      $("body").niceScroll();
+      $index.find("ul").niceScroll();
+    </script>
+  </body>
+</html>
